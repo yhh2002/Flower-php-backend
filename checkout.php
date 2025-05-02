@@ -46,6 +46,8 @@ $address = $data['address'] ?? '';
 $delivery_date = $data['deliveryDate'] ?? null;
 $total = $data['total'] ?? 0;
 $items = $data['items'] ?? [];
+$paymentMethod = $data['paymentMethod'] ?? 'PayPal';
+
 
 if ($deliveryMethod === '到店自取') {
     $address = '九龍旺角花園街123號B鋪';
@@ -54,8 +56,7 @@ if ($deliveryMethod === '到店自取') {
 }
 
 
-
-$status = 'Completed';
+$status = ($paymentMethod === 'Alipay') ? '等候核對' : '已付款'; // ✅ 自動判斷狀態
 
 // ✅ 寫入每筆商品訂單（一項商品一筆記錄）
 foreach ($items as $item) {
@@ -69,11 +70,11 @@ foreach ($items as $item) {
     $stmt = $conn->prepare("INSERT INTO orders (
         user_id, phone, product_id, quantity, price, total_amount,
         delivery_method, delivery_district, delivery_address, delivery_date,
-        delivery_time,size,stems, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)");
+        delivery_time,size,stems, status,payment_method
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)");
 
     $stmt->bind_param(
-        "isiiidssssdsis",
+        "isiiidssssssiss",
         $user_id,
         $phone,
         $productId,
@@ -88,6 +89,7 @@ foreach ($items as $item) {
         $size,
         $stems,
         $status,
+        $paymentMethod
     );
     $stmt->execute();
 }

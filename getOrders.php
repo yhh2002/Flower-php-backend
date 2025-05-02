@@ -41,6 +41,7 @@ $sql = "SELECT
     o.size,
     o.stems,
     o.status,
+    o.payment_method,
     o.created_at
 FROM orders o 
 LEFT JOIN products p ON o.product_id = p.id
@@ -70,6 +71,7 @@ if ($result->num_rows > 0) {
             "size"   => $row["size"],
             "stems"   => $row["stems"],
             "delivery_district"   => $row["delivery_district"],
+            "payment_method" => $row['payment_method'],
 
 
         ];

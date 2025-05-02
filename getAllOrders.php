@@ -31,7 +31,10 @@ $sql = "SELECT o.id AS order_id,
         o.delivery_address,
         o.delivery_date,
         o.delivery_time,
-        o.delivery_district
+        o.delivery_district,
+        o.size,
+        o.stems,
+        o.payment_method
         FROM orders o
         JOIN users u ON o.user_id = u.id
         JOIN products p ON o.product_id = p.id
