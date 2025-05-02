@@ -1,0 +1,24 @@
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  width: 150px;
+  z-index: 1000;
+}
+
+.user-dropdown .item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.user-dropdown .item:hover {
+  background: #f1f1f1;
+}

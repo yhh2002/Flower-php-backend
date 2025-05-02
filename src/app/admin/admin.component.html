@@ -1,0 +1,154 @@
+<h2 class="ui header">⚙️ 管理者後台</h2>
+<div class="ui divider"></div>
+
+<div class="ui vertical menu">
+  <a class="item" (click)="selectedSection = 'products'">📦 產品管理</a>
+  <a class="item" (click)="selectedSection = 'orders'">📜 訂單管理</a>
+</div>
+
+<div class="ui segment">
+  <!-- 📦 產品管理 -->
+  <div *ngIf="selectedSection === 'products'">
+    <h3>📦 產品管理</h3>
+    <button class="ui primary button" (click)="addProduct()">➕ 新增產品</button>
+
+   <!-- 🔽 新增產品表單 -->
+<div class="ui form">
+  <div class="fields">
+    <div class="field">      <label>產品名稱</label>
+      <input type="text" [(ngModel)]="newProduct.name" placeholder="產品名稱"></div>
+
+<!-- 類別選擇 -->
+<div class="field">
+  <label>類別</label>
+  <select class="ui dropdown" [(ngModel)]="newProduct.category">
+    <option value="">請選擇類別</option>
+    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+  </select>
+</div>
+    
+    <div class="field"> <label>描述</label><input type="text" [(ngModel)]="newProduct.description" placeholder="描述"></div>
+
+    <div class="field"> <label>價格</label><input type="number" [(ngModel)]="newProduct.price" placeholder="價格"></div>
+
+    <div class="field"> <label>庫存</label><input type="number" [(ngModel)]="newProduct.stock_quantity" placeholder="庫存"></div>
+
+<!-- 圖片上傳，當 category 沒選擇時，按鈕被禁用 -->
+<div class="field">
+  <label>上傳圖片</label>
+  <input type="file" (change)="onFileSelected($event)" [disabled]="!newProduct.category">
+  <input type="text" [(ngModel)]="newProduct.image_url" placeholder="圖片網址" readonly>
+</div>
+
+<!-- 圖片預覽 -->
+<div *ngIf="newProduct.image_url">
+  <img [src]="newProduct.image_url" alt="預覽圖片" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+</div>
+
+
+
+  </div>
+</div>
+
+<!-- 📂 類別篩選器 -->
+<div class="ui form" style="margin-bottom: 10px;">
+  <div class="inline fields">
+    <label>📂 篩選類別：</label>
+    <select class="ui dropdown" [(ngModel)]="selectedCategoryFilter">
+      <option value="">全部類別</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+    <button class="ui button" (click)="selectedCategoryFilter=''">🔄 清除篩選</button>
+  </div>
+</div>
+
+<!-- ✅ 產品列表 -->
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>產品名稱</th>
+      <th>類別</th>
+      <th>價格</th>
+      <th>描述</th>
+      <th>圖片</th>
+      <th>庫存</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of filteredProducts">
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.price }} HKD</td>
+      <td>{{ product.description }}</td>
+      <td>
+          <img *ngIf="product.image_url" [src]="product.image_url" alt="產品圖片" style="width: 80px; height: auto;">
+      </td>
+      <td>{{ product.stock_quantity }}</td>
+      <td>
+        <button class="ui yellow button" (click)="openEditDialog(product)">✏️ 編輯</button>
+        <button class="ui red button" (click)="deleteProduct(product.id)">🗑️ 刪除</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+  
+ 
+</div>
+
+  <!-- 📜 訂單管理 -->
+  <div *ngIf="selectedSection === 'orders'">
+    <h3>📜 訂單管理</h3>
+
+      <!-- 🔽 送貨方式篩選器 -->
+  <div class="ui form" style="margin-bottom: 10px;">
+    <div class="inline fields">
+      <label>🚚 送貨方式篩選：</label>
+      <select class="ui dropdown" [(ngModel)]="selectedDeliveryFilter">
+        <option value="">全部</option>
+        <option value="標準送貨">標準送貨</option>
+        <option value="到店自取">到店自取</option>
+      </select>
+      <button class="ui button" (click)="selectedDeliveryFilter = ''">🔄 清除篩選</button>
+    </div>
+  </div>
+
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>訂單 ID</th>
+          <th>顧客</th>
+          <th>產品</th>
+          <th>數量</th>
+          <th>單價</th>
+          <th>總金額</th>
+          <th>付款狀態</th>
+          <th>時間</th>
+          <th>送貨方式</th>
+          <th>送貨地址</th>
+          <th>送貨日期</th>
+          <th>送貨時間</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td>{{ order.order_id }}</td>
+          <td>{{ order.customer }}</td>
+          <td>{{ order.product_name }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price }} HKD</td>
+          <td>{{ order.total_amount }} HKD</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.created_at }}</td>
+          <td>{{ order.delivery_method }}</td>
+          <td>{{ order.delivery_district }}/{{ order.delivery_address }}</td>
+          <td>{{ order.delivery_date }}</td>
+          <td>{{ order.delivery_time }}</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

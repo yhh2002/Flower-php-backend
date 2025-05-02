@@ -1,0 +1,39 @@
+<div class="ui container">
+    <h2 class="ui teal header">
+      <i class="user icon"></i> 修改個人資料
+    </h2>
+  
+    <p *ngIf="message" class="ui {{ message.includes('成功') ? 'green' : 'red' }} message">
+      {{ message }}
+    </p>
+  
+    <form class="ui form" (submit)="updateProfile()">
+      <div class="field">
+        <label>姓名</label>
+        <input type="text" name="name" [(ngModel)]="user.name" required>
+      </div>
+  
+      <div class="field">
+        <label>電話</label>
+        <input type="text" name="phone" [(ngModel)]="user.phone">
+      </div>
+  
+      <div class="field">
+        <label>地址</label>
+        <input type="text" name="address" [(ngModel)]="user.address">
+      </div>
+  
+      <div class="field">
+        <label>新密碼（可選）</label>
+        <div class="ui action input">
+          <input [type]="passwordFieldType" name="password" [(ngModel)]="user.password">
+          <button type="button" class="ui icon button" (click)="togglePassword()">
+            <i class="eye icon"></i>
+          </button>
+        </div>
+      </div>
+      
+      <button type="submit" class="ui primary button">更新資料</button>
+    </form>
+  </div>
+  

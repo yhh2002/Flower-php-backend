@@ -1,0 +1,17 @@
+.centered-modal {
+  position: fixed;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 40%; /* ✅ 控制視窗寬度 (可調整為 35% 或 50%) */
+  max-width: 450px; /* ✅ 限制最大寬度 */
+  min-width: 300px; /* ✅ 避免太窄 */
+  height: 60vh; /* ✅ 控制視窗高度 */
+  max-height: 500px; /* ✅ 避免過長 */
+  background-color: white;
+  padding: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  overflow-y: auto; /* ✅ 讓內容超出時可滾動 */
+}

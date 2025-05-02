@@ -1,0 +1,95 @@
+<div class="ui container">
+  <div class="ui grid">
+    <div class="six wide column">
+      <div class="ui segment">
+        <img *ngIf="product" class="ui centered image" [src]="product.image_url" alt="{{ product.name }}">
+      </div>
+    </div>
+
+    <div class="ten wide column">
+      <h2 class="ui header" *ngIf="product">{{ product.name }}</h2>
+      <div class="ui divider"></div>
+
+      <p *ngIf="product"><strong>類別：</strong> {{ product.category }}</p>
+      <p *ngIf="product"><strong>描述：</strong> {{ product.description }}</p>
+      <p *ngIf="product"><strong>庫存數量：</strong> {{ product.stock_quantity }}</p>
+
+      <p><strong>選擇尺寸：</strong></p>
+      <select class="ui dropdown" [(ngModel)]="selectedSize" (change)="onSizeChange()">
+        <option value="M">M Size</option>
+        <option value="L">L Size</option>
+      </select>
+      
+      <p><strong>選擇枝數：</strong></p>
+      <select class="ui dropdown" [(ngModel)]="selectedStems" (change)="onStemChange()">
+        <option *ngFor="let option of availableOptions" [value]="option.stems">
+          {{ option.stems }} 枝（{{ option.price }} HKD）
+        </option>
+      </select>
+      
+      <p><strong>數量：</strong></p>
+      <input type="number" [(ngModel)]="quantity" min="1" value="1" style="width: 80px;">
+      
+      <button class="ui primary button" (click)="addToCart()">加入購物車</button>
+      <p *ngIf="cartMessage" style="color: green;">{{ cartMessage }}</p>
+      
+
+      <div class="ui divider"></div>
+      <a routerLink="/" class="ui button">⬅ 返回產品列表</a>
+    </div>
+  </div>
+</div>
+
+<!-- 🔄 如果 `product` 尚未載入，顯示「載入中」 -->
+<div *ngIf="!product">
+  <p>⏳ 產品資料載入中...</p>
+</div>
+
+<!-- ✅ 美化版提示視窗 -->
+<div 
+  class="ui dimmer modals visible active" 
+  *ngIf="showPopup" 
+  style="display: flex; justify-content: center; align-items: center; z-index: 2000;"
+>
+  <div 
+    class="ui raised very padded text container segment" 
+    style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); text-align: center; max-width: 400px;"
+  >
+    <h2 style="color: #DB2B39;">
+      🌸 歡迎光臨 Alice Florist!
+    </h2>
+    <p style="font-size: 1.1rem; margin-bottom: 15px;">
+      如需自訂花束，請透過以下方式聯絡我們：
+    </p>
+
+    <div style="margin-bottom: 12px;">
+      <a 
+        href="https://wa.me/85266899885" 
+        target="_blank" 
+        class="ui green icon button"
+      >
+        <i class="whatsapp icon"></i>
+        WhatsApp 6689 9885
+      </a>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <a 
+        href="https://www.instagram.com/alice_florist_ig/" 
+        target="_blank" 
+        class="ui pink icon button"
+      >
+        <i class="instagram icon"></i>
+        IG: alice_florist_ig
+      </a>
+    </div>
+
+    <button 
+      class="ui red button" 
+      (click)="closePopup()" 
+      style="width: 100%;"
+    >
+      我知道了 ❤️
+    </button>
+  </div>
+</div>

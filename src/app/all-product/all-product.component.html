@@ -1,0 +1,53 @@
+<h2 class="ui header">🌸 產品列表</h2>
+
+<!-- 🔍 搜尋 & 類別篩選 -->
+<div class="ui form">
+  <div class="fields">
+    <!-- 🔍 搜尋輸入框 -->
+    <div class="field">
+      <div class="ui action input">
+        <input type="text" placeholder="搜尋產品..." [(ngModel)]="searchText" (input)="filterProducts()">
+        <button class="ui button" (click)="clearSearch()">❌ 清除</button>
+      </div>
+    </div>
+
+    <!-- 🏷️ 類別篩選 -->
+    <div class="field">
+      <select class="ui dropdown" [(ngModel)]="selectedCategory" (change)="filterProducts()">
+        <option value="">所有類別</option>
+        <option *ngFor="let category of uniqueCategories" [value]="category">{{ category }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="ui divider"></div>
+
+<!-- 🔍 搜尋結果 -->
+<p *ngIf="filteredProducts.length === 0">😢 沒有找到符合的產品！</p>
+
+<!-- 🔍 產品卡片展示，每行顯示四個 -->
+<div class="ui stackable four column grid">
+  <div class="column" *ngFor="let product of filteredProducts">
+    <div class="ui fluid card">
+      <div class="image">
+        <img [src]="product.image_url" alt="{{ product.name }}">
+      </div>
+      <div class="content">
+        <a class="header">{{ product.name }}</a>
+        <div class="meta">
+          <span class="category">{{ product.category }}</span>
+        </div>
+      </div>
+      <div class="extra content">
+        <span class="ui large red label">${{ product.price }}</span>
+        <button class="ui primary button right floated" [routerLink]="['/product', product.id]">
+          查看詳情
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<router-outlet></router-outlet>

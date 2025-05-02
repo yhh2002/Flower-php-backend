@@ -1,0 +1,146 @@
+<h2>🛒 結帳</h2>
+
+<!-- 📌 收件人資訊 -->
+<form class="ui form">
+  <div class="field">
+    <label>姓名</label>
+    <input type="text" placeholder="請輸入姓名" [(ngModel)]="customer.name" name="name" required>
+  </div>
+  <div class="field">
+    <label>聯絡電話</label>
+    <input type="text" placeholder="請輸入電話" [(ngModel)]="customer.phone" name="phone" required>
+  </div>
+<!-- 🚚 送貨方式 -->
+<div class="field">
+  <label>送貨方式</label>
+  <select class="ui dropdown" [(ngModel)]="customer.deliveryMethod" name="deliveryMethod" required>
+    <option value="標準送貨">標準送貨</option>
+    <option value="到店自取">到店自取</option>
+  </select>
+</div>
+
+<!-- 🚚 送貨地區 -->
+<div class="field" *ngIf="customer.deliveryMethod === '標準送貨'">
+<label>選擇送貨地區：</label>
+<select [(ngModel)]="customer.deliveryDistrict" name="deliveryDistrict" (change)="updateDeliveryFee()">
+  <optgroup label="香港島（總運費：$250）">
+    <option>中西區</option>
+    <option>灣仔區</option>
+    <option>東區</option>
+    <option>南區</option>
+  </optgroup>
+  <optgroup label="九龍">
+    <option value="油尖旺區">油尖旺區（$250）</option>
+    <option value="深水埗區">深水埗區（$250）</option>
+    <option value="九龍城區">九龍城區（$180）</option>
+    <option value="黃大仙區">黃大仙區（$180）</option>
+    <option value="觀塘區">觀塘區（$180）</option>
+  </optgroup>
+  <optgroup label="新界">
+    <option value="葵青區">葵青區（$250）</option>
+    <option value="荃灣區">荃灣區（$250）</option>
+    <option value="元朗區">元朗區（$300）</option>
+    <option value="屯門區">屯門區（$300）</option>
+    <option value="北區">北區（$300）</option>
+    <option value="大埔區">大埔區（$300）</option>
+    <option value="沙田區">沙田區（$250）</option>
+    <option value="西貢區">西貢區（$250）</option>
+  </optgroup>
+  <optgroup label="離島（建議碼頭交收）">
+    <option value="中環碼頭">中環碼頭（$250）</option>
+    <option value="東涌碼頭">東涌碼頭（$300）</option>
+    <option value="馬灣">馬灣（$500，需提前兩天）</option>
+    <option value="愉景灣">愉景灣（$700，需提前兩天）</option>
+  </optgroup>
+</select>
+<p>運費：{{ deliveryFee | currency:'HKD' }}</p>
+</div>
+
+<!-- 📍 若選擇標準送貨，顯示地址輸入欄 -->
+<div class="field" *ngIf="customer.deliveryMethod === '標準送貨'">
+  <label>送貨地址</label>
+  <input 
+    type="text" 
+    placeholder="請輸入送貨地址" 
+    [(ngModel)]="customer.address" 
+    name="address" 
+    required
+  >
+
+  <!-- ✅ 備註提示 -->
+  <div class="ui yellow message" style="margin-top: 10px;">
+    <i class="info circle icon"></i>
+    <div class="content">
+      <p><strong>敬請盡量輸入詳細地址，部份地址或有停車場收費。</strong></p>
+      <p>確認訂單後，如有特別運費或停車場額外收費，將個別通知客人有關情況並保留收取該費用的權利，且並不能作退款，謝謝。</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- 🗓️ 選擇送貨日期 -->
+<div class="field" *ngIf="customer.deliveryMethod === '標準送貨'">
+  <label>送貨日期</label>
+  <input type="date" [(ngModel)]="customer.deliveryDate" name="deliveryDate" required>
+</div>
+
+<label>送貨時間：</label>
+<select [(ngModel)]="customer.deliveryTime"name="deliveryTime"(change)="updateTimeSurcharge()" *ngIf="customer.deliveryMethod === '標準送貨'">
+  <option value="9am-13pm">上午9點至1點</option>
+  <option value="13pm-20pm">下午1點至8點</option>
+  <option value="6am-7am">上午6點至7點（加 $50）</option>
+  <option value="7am-8am">上午7點至8點（加 $50）</option>
+  <option value="20pm-21pm">晚上8點至9點（加 $100）</option>
+  <option value="21pm-22pm">晚上9點至10點（加 $100）</option>
+  <option value="22pm-23pm">晚上10點至11點（加 $100）</option>
+  <option value="23pm-24pm">晚上11點至12點（加 $100）</option>
+</select>
+<p>額外時間附加費：{{ timeSurcharge | currency:'HKD' }}</p>
+
+
+
+<p>總運費：{{ finalShippingCost | currency:'HKD' }}</p>
+
+<!-- 🏬 若為自取，顯示地點 -->
+<div class="ui message" *ngIf="customer.deliveryMethod === '到店自取'">
+  <p>到店地址：九龍旺角花園街123號B鋪（星期一至日，上午11:00 - 晚上8:00）</p>
+</div>
+
+</form>
+
+<div class="ui divider"></div>
+
+<!-- 🛍️ 訂單資訊 -->
+<h3>訂單摘要</h3>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>產品</th>
+      <th>數量</th>
+      <th>單價</th>
+      <th>小計</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cartItems">
+      <td>{{ item.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }} HKD</td>
+      <td>{{ item.quantity * item.price }} HKD</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>商品總額：{{ totalPrice | currency:'HKD' }}</h3>
+<h3>總運費：{{ finalShippingCost | currency:'HKD' }}</h3>
+<h2 style="color:green;">訂單總金額（含運費）：<strong>{{ finalTotal | currency:'HKD' }}</strong></h2>
+
+<!-- 🔵 PayPal 按鈕 -->
+<div id="paypal-button-container"></div>
+
+<!-- ✅ 付款成功訊息 -->
+<div *ngIf="orderSuccess" class="ui positive message">
+  <p>🎉 訂單已成功提交！感謝您的購買！</p>
+</div>

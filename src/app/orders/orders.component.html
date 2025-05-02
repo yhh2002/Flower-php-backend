@@ -1,0 +1,71 @@
+<h2>📜 我的訂單</h2>
+
+<div *ngIf="orders.length === 0">
+  <p>沒有歷史訂單。</p>
+</div>
+
+<div class="ui styled fluid accordion" *ngFor="let order of orders; let i = index"  [class.active]="activeIndex === i">
+  
+  <!-- 🔼 摺疊標題：顯示簡要 -->
+  <div class="title" (click)="toggleAccordion(i)">
+    <h2>
+    <i class="dropdown icon"></i>
+    🆔 訂單編號：{{ order.id }}｜
+    📅 {{ order.created_at | date:'yyyy/MM/dd HH:mm' }}｜
+    👤 {{ order.name }}（{{ order.phone }}）
+    </h2>
+  </div>
+
+  <!-- 🔽 摺疊內容：詳細內容用表格 -->
+  <div class="content" [class.active]="activeIndex === i" >
+    <table class="ui celled table" >
+      <tbody>
+        <tr>
+          <td><strong>產品名稱</strong></td>
+          <td>{{ order.product_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>尺寸 / 枝數</strong></td>
+          <td>{{ order.size }} / {{ order.stems }} 枝</td>
+        </tr>
+        <tr>
+          <td><strong>數量</strong></td>
+          <td>{{ order.quantity }} 件</td>
+        </tr>
+        <tr>
+          <td><strong>單價</strong></td>
+          <td>{{ order.price }} HKD</td>
+        </tr>
+        <tr>
+          <td><strong>商品小計</strong></td>
+          <td>{{ order.quantity * order.price }} HKD</td>
+        </tr>
+        <tr>
+          <td><strong>送貨方式</strong></td>
+          <td>{{ order.delivery_method }}</td>
+        </tr>
+        <tr *ngIf="order.delivery_method === '標準送貨'">
+          <td><strong>送貨地區 / 地址 / 日期 / 時間</strong></td>
+          <td>
+            {{ order.delivery_district }}<br>
+            {{ order.delivery_address }}<br>
+            {{ order.delivery_date }}<br>
+            {{ order.delivery_time }}
+          </td>
+        </tr>
+        <tr>
+          <td><strong>總金額（含運費）</strong></td>
+          <td>{{ order.total_amount }} HKD</td>
+        </tr>
+        <tr>
+          <td><strong>狀態</strong></td>
+          <td>
+            <span [ngClass]="{'green-text': order.status === '已完成', 'red-text': order.status !== '已完成'}">
+              {{ order.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

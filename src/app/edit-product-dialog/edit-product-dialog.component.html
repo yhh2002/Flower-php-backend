@@ -1,0 +1,49 @@
+<div class="ui modal active centered-modal">
+  <div class="header">編輯產品</div>
+  <div class="content">
+    <div class="ui form">
+      <div class="field">
+        <label>產品名稱</label>
+        <input type="text" [(ngModel)]="editingProduct.name">
+      </div>
+
+      <div class="field">
+        <label>類別</label>
+        <select class="ui dropdown" [(ngModel)]="editingProduct.category">
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>價格</label>
+        <input type="number" [(ngModel)]="editingProduct.price">
+      </div>
+
+      <div class="field">
+        <label>描述</label>
+        <textarea [(ngModel)]="editingProduct.description" rows="2"></textarea>
+      </div>
+
+      <div class="field">
+        <label>圖片</label>
+        <input type="text" [(ngModel)]="editingProduct.image_url" placeholder="圖片網址">
+        <input type="file" (change)="onFileSelected($event)">
+      </div>
+
+      <!-- ✅ 縮小圖片預覽 -->
+      <div class="field">
+        <img *ngIf="editingProduct.image_url" [src]="editingProduct.image_url" alt="產品圖片" style="width: 80px; height: auto;">
+      </div>
+
+      <div class="field">
+        <label>庫存</label>
+        <input type="number" [(ngModel)]="editingProduct.stock_quantity">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="ui positive button" (click)="updateProduct()">💾 更新</button>
+    <button class="ui button" (click)="closeDialog()">❌ 取消</button>
+  </div>
+</div>
