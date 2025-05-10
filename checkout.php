@@ -56,7 +56,7 @@ if ($deliveryMethod === '到店自取') {
 }
 
 
-$status = ($paymentMethod === 'Alipay') ? '等候核對' : '已付款'; // ✅ 自動判斷狀態
+$status = ($paymentMethod  !== 'PayPal') ? '等候核對' : '已付款'; // ✅ 自動判斷狀態
 
 // ✅ 寫入每筆商品訂單（一項商品一筆記錄）
 foreach ($items as $item) {
